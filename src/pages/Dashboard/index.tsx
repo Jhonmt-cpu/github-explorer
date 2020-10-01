@@ -43,7 +43,7 @@ const Dashboard: React.FC = () => {
     event.preventDefault();
 
     if (!newRepo) {
-      setInputError('Digite autor/nome do repositório');
+      setInputError('Digite o autor/nome do repositório');
       return;
     }
 
@@ -52,8 +52,17 @@ const Dashboard: React.FC = () => {
 
       const repository = response.data;
 
-      setRepositories([...repositories, repository]);
+      const repositoryAlredyListed = repositories.find(
+        r => r.full_name === repository.full_name,
+      );
 
+      if (repositoryAlredyListed) {
+        setNewRepo('');
+        setInputError('Repositório ja listado');
+        return;
+      }
+
+      setRepositories([...repositories, repository]);
       setNewRepo('');
       setInputError('');
     } catch (err) {
